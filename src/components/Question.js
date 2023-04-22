@@ -1,17 +1,31 @@
-import React, { useState } from "react";
+
+
+import React, { useEffect, useState } from "react";
 
 function Question({ question, onAnswered }) {
   const [timeRemaining, setTimeRemaining] = useState(10);
 
   // add useEffect code
+  // eslint-disable-next-line 
+  useEffect(()=> {
+    const timeAllocated = setTimeout(()=>
+    {setTimeRemaining((timeRemaining)=> timeRemaining-1)}, 1000)
+    if(timeRemaining === 0)
+    {
+      setTimeRemaining(10)
+      onAnswered(false)
+      return
+    }
+    return function cleanUp(){
+      clearTimeout(timeAllocated)
+    }
+  })
 
   function handleAnswer(isCorrect) {
     setTimeRemaining(10);
     onAnswered(isCorrect);
   }
-
   const { id, prompt, answers, correctIndex } = question;
-
   return (
     <>
       <h1>Question {id}</h1>
@@ -28,5 +42,4 @@ function Question({ question, onAnswered }) {
     </>
   );
 }
-
 export default Question;
